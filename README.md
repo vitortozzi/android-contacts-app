@@ -12,11 +12,8 @@ A clean and intuitive Android application for managing your personal contacts, b
 
 - **Language:** [Kotlin](https://kotlinlang.org/)
 - **UI Framework:** [Jetpack Compose](https://developer.android.com/jetpack/compose)
-- **Dependency Injection:** [Hilt](https://developer.android.com/training/dependency-injection/hilt-android)
-- **Local Database:** [Room](https://developer.android.com/training/data-storage/room)
 - **Navigation:** [Navigation Compose](https://developer.android.com/jetpack/compose/navigation)
 - **Architecture:** MVVM (Model-View-ViewModel)
-- **Image Loading:** (Add if used, e.g., Coil)
 - **Build System:** Gradle Kotlin DSL
 
 ## Project Structure
