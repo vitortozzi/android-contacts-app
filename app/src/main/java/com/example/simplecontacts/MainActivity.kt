@@ -15,7 +15,9 @@ import com.example.simplecontacts.ui.contacts.details.ContactDetailScreen
 import com.example.simplecontacts.ui.contacts.list.ContactsViewModel
 import com.example.simplecontacts.ui.contacts.list.MainScreen
 import com.example.simplecontacts.ui.theme.SimpleContactsTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

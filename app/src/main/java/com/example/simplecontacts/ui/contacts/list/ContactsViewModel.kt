@@ -1,28 +1,37 @@
 package com.example.simplecontacts.ui.contacts.list
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.simplecontacts.domain.Contact
+import com.example.simplecontacts.domain.ContactRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ContactsViewModel: ViewModel() {
+@HiltViewModel
+class ContactsViewModel @Inject constructor(
+    private val repository: ContactRepository
+): ViewModel() {
 
-    private val _uiState = MutableStateFlow(
-        UiState(
-            listOf(
-                Contact("Vitor", "(41) 99232-0199"),
-                Contact("Pai", "(11) 99885-6531"),
-                Contact("Lidia", "(11) 97119-0100"),
-            )
-        )
-    )
+    private val _uiState = MutableStateFlow(UiState())
     val uiState = _uiState.asStateFlow()
 
+    init {
+        viewModelScope.launch {
+            repository.getContacts().collect {
+                contacts -> _uiState.value = _uiState.value.copy(
+                    contacts = contacts
+                )
+            }
+        }
+    }
+
     fun addContact(contact: Contact) {
-        _uiState.value = _uiState.value.copy(
-            showDialog = false,
-            contacts = _uiState.value.contacts + contact
-        )
+        viewModelScope.launch {
+            repository.addContact(contact)
+        }
     }
 
 

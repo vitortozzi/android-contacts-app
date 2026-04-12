@@ -163,11 +163,7 @@ fun ContactList(
 fun ContactListPreview() {
     SimpleContactsTheme {
         ContactList(
-            listOf(
-                Contact("Vitor", "(41) 99232-0199"),
-                Contact("Pai", "(11) 99885-6531"),
-                Contact("Lidia", "(11) 97119-0100"),
-            ),
+            listOf(),
             onContactClick = {}
         )
     }
