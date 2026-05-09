@@ -10,7 +10,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import com.example.simplecontacts.domain.Contact
+import com.example.simplecontacts.ui.navigation.ContactDetailRoute
+import com.example.simplecontacts.ui.navigation.ContactListRoute
 import com.example.simplecontacts.ui.contacts.details.ContactDetailScreen
 import com.example.simplecontacts.ui.contacts.list.ContactsViewModel
 import com.example.simplecontacts.ui.contacts.list.MainScreen
@@ -28,11 +31,9 @@ class MainActivity : ComponentActivity() {
             SimpleContactsTheme {
                 NavHost(
                     navController = navController,
-                    startDestination = "list"
+                    startDestination = ContactListRoute,
                 ) {
-                    composable(
-                        route = "list"
-                    ) {
+                    composable<ContactListRoute> {
                         val uiState by viewModel.uiState.collectAsStateWithLifecycle()
                         MainScreen(
                             uiState = uiState,
@@ -46,29 +47,26 @@ class MainActivity : ComponentActivity() {
                                 viewModel.addContact(it)
                             },
                             onContactClick = {
-                                navController.navigate("details/${it.name}/${it.phoneNumber}")
+                                navController.navigate(ContactDetailRoute(
+                                    name = it.name,
+                                    phoneNumber = it.phoneNumber
+                                ))
                             }
                         )
                     }
-                    composable(
-                        "details/{contactName}/{phoneNumber}"
-                    ) {
-                        val contactName = it.arguments?.getString("contactName") ?: ""
-                        val phoneNumber = it.arguments?.getString("phoneNumber") ?: ""
+                    composable<ContactDetailRoute> {
+                        val route = it.toRoute<ContactDetailRoute>()
                         ContactDetailScreen(
                             Contact(
-                                name = contactName,
-                                phoneNumber = phoneNumber
+                                name = route.name,
+                                phoneNumber = route.phoneNumber
                             ),
                             onClickBack = {
                                 navController.popBackStack()
                             }
                         )
                     }
-
                 }
-
-
             }
         }
     }
