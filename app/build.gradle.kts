@@ -67,6 +67,11 @@ dependencies {
     // Navigation Compose
     implementation(libs.androidx.navigation.compose)
 
+    // Unit Testing
+    testImplementation(libs.mockk)
+    testImplementation(libs.turbine)
+    testImplementation(libs.kotlinx.coroutines.test)
+
     // Room
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
