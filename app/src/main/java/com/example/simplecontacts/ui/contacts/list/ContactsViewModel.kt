@@ -5,7 +5,9 @@ import androidx.lifecycle.viewModelScope
 import com.example.simplecontacts.domain.Contact
 import com.example.simplecontacts.domain.ContactRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -17,6 +19,9 @@ class ContactsViewModel @Inject constructor(
 
     private val _uiState = MutableStateFlow(UiState())
     val uiState = _uiState.asStateFlow()
+
+    private val _events = MutableSharedFlow<ContactsEvent>()
+    val events = _events.asSharedFlow()
 
     init {
         viewModelScope.launch {
@@ -47,5 +52,10 @@ class ContactsViewModel @Inject constructor(
         )
     }
 
+    fun onTapContact(contact: Contact) {
+        viewModelScope.launch {
+            _events.emit(ContactsEvent.NavigationToDetail(contact))
+        }
+    }
 
 }

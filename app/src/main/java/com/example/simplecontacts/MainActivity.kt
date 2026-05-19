@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -15,6 +16,7 @@ import com.example.simplecontacts.domain.Contact
 import com.example.simplecontacts.ui.navigation.ContactDetailRoute
 import com.example.simplecontacts.ui.navigation.ContactListRoute
 import com.example.simplecontacts.ui.contacts.details.ContactDetailScreen
+import com.example.simplecontacts.ui.contacts.list.ContactsEvent
 import com.example.simplecontacts.ui.contacts.list.ContactsViewModel
 import com.example.simplecontacts.ui.contacts.list.MainScreen
 import com.example.simplecontacts.ui.theme.SimpleContactsTheme
@@ -29,6 +31,17 @@ class MainActivity : ComponentActivity() {
             val viewModel: ContactsViewModel = viewModel()
             val navController = rememberNavController()
             SimpleContactsTheme {
+
+                LaunchedEffect(Unit) {
+                    viewModel.events.collect {
+                        when (it) {
+                            is ContactsEvent.NavigationToDetail -> {
+                                navController.navigate(ContactDetailRoute(it.contact.name, it.contact.phoneNumber))
+                            }
+                        }
+                    }
+                }
+
                 NavHost(
                     navController = navController,
                     startDestination = ContactListRoute,
@@ -47,10 +60,7 @@ class MainActivity : ComponentActivity() {
                                 viewModel.addContact(it)
                             },
                             onContactClick = {
-                                navController.navigate(ContactDetailRoute(
-                                    name = it.name,
-                                    phoneNumber = it.phoneNumber
-                                ))
+                                viewModel.onTapContact(it)
                             }
                         )
                     }
